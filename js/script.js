@@ -5,6 +5,11 @@ canvas.height = 900;
 canvas.style.backgroundColor = '#90ee90';
 let cellSize = 60;
 
+canvas.addEventListener('contextmenu', function (event) {
+    event.preventDefault();
+    return false;
+}, false);
+
 ctx.beginPath();
 ctx.setLineDash([10, 2]);
 ctx.strokeStyle = '#0005';
