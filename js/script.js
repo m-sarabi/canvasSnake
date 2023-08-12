@@ -44,7 +44,7 @@ function drawBall() {
 
     x += dx;
 
-    if (x > canvas.width - cellSize || x < 0) {
+    if (x + dx > canvas.width - cellSize || x + dx < 0) {
         dx *= -1;
     }
 }
