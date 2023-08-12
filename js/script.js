@@ -33,19 +33,44 @@ function drawGrid() {
 
 
 let x = 0, y = 0;
-let dx = 2, dy = 2;
+let dx = 0.5, dy = 0.5;
+let ddx = 0, ddy = 0;
+let direction = null;
 
 function drawBall() {
     ctx.beginPath();
     ctx.arc(x + cellSize / 2, y + cellSize / 2, cellSize / 3, 0, Math.PI * 2);
-    ctx.fillStyle = 'orange';
+    ctx.fillStyle = 'darkred';
     ctx.fill();
     ctx.closePath();
 
-    x += dx;
-
-    if (x + dx > canvas.width - cellSize || x + dx < 0) {
-        dx *= -1;
+    if (x % cellSize === 0 && y % cellSize === 0) {
+        switch (direction) {
+            case 'right':
+                ddx = dx;
+                ddy = 0;
+                break;
+            case 'down':
+                ddx = 0;
+                ddy = dy;
+                break;
+            case 'left':
+                ddx = -dx;
+                ddy = 0;
+                break;
+            case 'up':
+                ddx = 0;
+                ddy = -dy;
+                break;
+        }
+    }
+    if (x >= 0 && x <= canvas.width - cellSize) {
+        x += ddx;
+        x = Math.min(canvas.width - cellSize, Math.max(0, x));
+    }
+    if (y >= 0 && y <= canvas.height - cellSize) {
+        y += ddy;
+        y = Math.min(canvas.height - cellSize, Math.max(0, y));
     }
 }
 
@@ -55,4 +80,30 @@ function draw() {
     drawBall();
 }
 
-setInterval(draw, 15);
+setInterval(draw, 1);
+
+function directionKey(key) {
+    switch (key) {
+        case 'ArrowRight':
+        case 'KeyD':
+            direction = 'right';
+            break;
+        case 'ArrowDown':
+        case 'KeyS':
+            direction = 'down';
+            break;
+        case 'ArrowLeft':
+        case 'KeyA':
+            direction = 'left';
+            break;
+        case 'ArrowUp':
+        case 'KeyW':
+            direction = 'up';
+            break;
+    }
+}
+
+window.addEventListener('keydown', function (event) {
+    let key = event.code;
+    directionKey(key);
+});
