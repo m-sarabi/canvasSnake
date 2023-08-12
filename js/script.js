@@ -107,3 +107,40 @@ window.addEventListener('keydown', function (event) {
     let key = event.code;
     directionKey(key);
 });
+
+let touchPos = [[], []];
+canvas.addEventListener('touchstart', function (event) {
+    event.preventDefault();
+    touchPos[0] = [event.changedTouches[0].screenX, event.changedTouches[0].screenY];
+});
+
+window.addEventListener('touchmove', function (event) {
+    touchPos[1] = [event.changedTouches[0].screenX, event.changedTouches[0].screenY];
+    touchToKey();
+});
+
+window.addEventListener('touchend', function () {
+    touchPos = [[], []];
+});
+
+function touchToKey() {
+    let touchThreshold = cellSize * 0.75;
+    if (Math.abs(touchPos[1][0] - touchPos[0][0]) > Math.abs(touchPos[1][1] - touchPos[0][1])) {
+        if (touchPos[1][0] - touchPos[0][0] > touchThreshold) {
+            directionKey('ArrowRight');
+            touchPos[0] = touchPos[1];
+        } else if (touchPos[1][0] - touchPos[0][0] < -touchThreshold) {
+            directionKey('ArrowLeft');
+            touchPos[0] = touchPos[1];
+        }
+    } else if (Math.abs(touchPos[1][0] - touchPos[0][0]) < Math.abs(touchPos[1][1] - touchPos[0][1])) {
+        if (touchPos[1][1] - touchPos[0][1] > touchThreshold) {
+            directionKey('ArrowDown');
+            touchPos[0] = touchPos[1];
+        } else if (touchPos[1][1] - touchPos[0][1] < -touchThreshold) {
+            directionKey('ArrowUp');
+            touchPos[0] = touchPos[1];
+
+        }
+    }
+}
