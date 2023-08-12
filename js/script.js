@@ -42,8 +42,10 @@ function drawBall() {
     ctx.fill();
     ctx.closePath();
 
-    if (x < canvas.width - cellSize) {
-        x += dx;
+    x += dx;
+
+    if (x > canvas.width - cellSize || x < 0) {
+        dx *= -1;
     }
 }
 
