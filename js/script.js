@@ -37,6 +37,7 @@ let speed = 1;
 let dx = 0, dy = 0;
 let pastX = x, pastY = y;
 let direction = null, changeDirection = false, pastDirection = direction;
+let snakeDirection = null;
 let debug = false;
 
 function drawBall(dt) {
@@ -95,6 +96,7 @@ function updateDirection() {
         if (change) {
             dx = (direction === 'right') ? speed : -speed;
             dy = 0;
+            snakeDirection = direction;
         }
     } else {
         if (pastX === x) {
@@ -109,6 +111,7 @@ function updateDirection() {
         if (change) {
             dx = 0;
             dy = (direction === 'down') ? speed : -speed;
+            snakeDirection = direction;
         }
     }
     changeDirection = !change;
@@ -118,19 +121,19 @@ function pressedKey(key) {
     switch (key) {
         case 'ArrowRight':
         case 'KeyD':
-            direction = 'right';
+            direction = (snakeDirection !== 'left') ? 'right' : direction;
             break;
         case 'ArrowDown':
         case 'KeyS':
-            direction = 'down';
+            direction = (snakeDirection !== 'up') ? 'down' : direction;
             break;
         case 'ArrowLeft':
         case 'KeyA':
-            direction = 'left';
+            direction = (snakeDirection !== 'right') ? 'left' : direction;
             break;
         case 'ArrowUp':
         case 'KeyW':
-            direction = 'up';
+            direction = (snakeDirection !== 'down') ? 'up' : direction;
             break;
         case 'Space':
             debug = !debug;
