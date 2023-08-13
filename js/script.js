@@ -104,7 +104,7 @@ function updateDirection() {
         } else if (pastX < x && (Math.floor((pastX + cellSize) / cellSize) * cellSize === Math.floor(x / cellSize) * cellSize)) {
             x = Math.floor(x / cellSize) * cellSize;
             change = true;
-        } else if (pastY > x && (Math.floor(pastX / cellSize) * cellSize === Math.floor((x + cellSize) / cellSize) * cellSize)) {
+        } else if (pastX > x && (Math.floor(pastX / cellSize) * cellSize === Math.floor((x + cellSize) / cellSize) * cellSize)) {
             x = Math.floor(pastX / cellSize) * cellSize;
             change = true;
         }
