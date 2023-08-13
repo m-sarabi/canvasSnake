@@ -36,7 +36,7 @@ let x = 0, y = 0;
 let speed = 1;
 let dx = 0, dy = 0;
 let pastX = x, pastY = y;
-let direction = null;
+let direction = null, changeDirection = false, pastDirection = direction;
 let debug = false;
 
 function drawBall(dt) {
@@ -45,8 +45,13 @@ function drawBall(dt) {
     ctx.fillStyle = 'darkred';
     ctx.fill();
     ctx.closePath();
+    if (pastDirection !== direction) {
+        changeDirection = true;
+    }
 
-    updateDirection();
+    if (changeDirection) {
+        updateDirection();
+    }
 
     pastX = x;
     pastY = y;
@@ -76,8 +81,8 @@ function draw(timestamp) {
 requestAnimationFrame(draw);
 
 function updateDirection() {
+    let change = false;
     if (['left', 'right'].includes(direction)) {
-        let change = false;
         if (pastY === y) {
             change = true;
         } else if (pastY < y && (Math.floor((pastY + cellSize) / cellSize) * cellSize === Math.floor(y / cellSize) * cellSize)) {
@@ -92,7 +97,6 @@ function updateDirection() {
             dy = 0;
         }
     } else {
-        let change = false;
         if (pastX === x) {
             change = true;
         } else if (pastX < x && (Math.floor((pastX + cellSize) / cellSize) * cellSize === Math.floor(x / cellSize) * cellSize)) {
@@ -107,6 +111,7 @@ function updateDirection() {
             dy = (direction === 'down') ? speed : -speed;
         }
     }
+    changeDirection = !change;
 }
 
 function pressedKey(key) {
