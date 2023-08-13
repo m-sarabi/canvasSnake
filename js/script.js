@@ -33,7 +33,7 @@ function drawGrid() {
 
 
 let x = 0, y = 0;
-let speed = [1, 1];
+let speed = 1;
 let dx = 0, dy = 0;
 let pastX = x, pastY = y;
 let direction = null;
@@ -46,47 +46,8 @@ function drawBall(dt) {
     ctx.fill();
     ctx.closePath();
 
-    if (['left', 'right'].includes(direction)) {
-        let change = false;
-        if (pastY === y) {
-            change = true;
-        } else if (pastY < y && (Math.floor((pastY + cellSize) / cellSize) * cellSize === Math.floor(y / cellSize) * cellSize)) {
-            y = Math.floor(y / cellSize) * cellSize;
-            change = true;
-        } else if (pastY > y && (Math.floor(pastY / cellSize) * cellSize === Math.floor((y + cellSize) / cellSize) * cellSize)) {
-            y = Math.floor(pastY / cellSize) * cellSize;
-            change = true;
-        }
-        if (change) {
-            if (direction === 'right') {
-                dx = speed[0];
-                dy = 0;
-            } else {
-                dx = -speed[0];
-                dy = 0;
-            }
-        }
-    } else {
-        let change = false;
-        if (pastX === x) {
-            change = true;
-        } else if (pastX < x && (Math.floor((pastX + cellSize) / cellSize) * cellSize === Math.floor(x / cellSize) * cellSize)) {
-            x = Math.floor(x / cellSize) * cellSize;
-            change = true;
-        } else if (pastY > x && (Math.floor(pastX / cellSize) * cellSize === Math.floor((x + cellSize) / cellSize) * cellSize)) {
-            x = Math.floor(pastX / cellSize) * cellSize;
-            change = true;
-        }
-        if (change) {
-            if (direction === 'down') {
-                dx = 0;
-                dy = speed[1];
-            } else {
-                dx = 0;
-                dy = -speed[1];
-            }
-        }
-    }
+    updateDirection();
+
     pastX = x;
     pastY = y;
     if (x >= 0 && x <= canvas.width - cellSize) {
@@ -113,6 +74,40 @@ function draw(timestamp) {
 }
 
 requestAnimationFrame(draw);
+
+function updateDirection() {
+    if (['left', 'right'].includes(direction)) {
+        let change = false;
+        if (pastY === y) {
+            change = true;
+        } else if (pastY < y && (Math.floor((pastY + cellSize) / cellSize) * cellSize === Math.floor(y / cellSize) * cellSize)) {
+            y = Math.floor(y / cellSize) * cellSize;
+            change = true;
+        } else if (pastY > y && (Math.floor(pastY / cellSize) * cellSize === Math.floor((y + cellSize) / cellSize) * cellSize)) {
+            y = Math.floor(pastY / cellSize) * cellSize;
+            change = true;
+        }
+        if (change) {
+            dx = (direction === 'right') ? speed : -speed;
+            dy = 0;
+        }
+    } else {
+        let change = false;
+        if (pastX === x) {
+            change = true;
+        } else if (pastX < x && (Math.floor((pastX + cellSize) / cellSize) * cellSize === Math.floor(x / cellSize) * cellSize)) {
+            x = Math.floor(x / cellSize) * cellSize;
+            change = true;
+        } else if (pastY > x && (Math.floor(pastX / cellSize) * cellSize === Math.floor((x + cellSize) / cellSize) * cellSize)) {
+            x = Math.floor(pastX / cellSize) * cellSize;
+            change = true;
+        }
+        if (change) {
+            dx = 0;
+            dy = (direction === 'down') ? speed : -speed;
+        }
+    }
+}
 
 function pressedKey(key) {
     switch (key) {
